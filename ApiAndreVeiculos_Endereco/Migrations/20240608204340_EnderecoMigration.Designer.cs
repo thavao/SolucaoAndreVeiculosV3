@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiAndreVeiculos_Endereco.Migrations
 {
     [DbContext(typeof(ApiAndreVeiculos_EnderecoContext))]
-    [Migration("20240608155508_EnderecoMigration")]
+    [Migration("20240608204340_EnderecoMigration")]
     partial class EnderecoMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,21 +25,14 @@ namespace ApiAndreVeiculos_Endereco.Migrations
 
             modelBuilder.Entity("Models.Endereco", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("CEP")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Bairro")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CEP")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Cidade")
+                    b.Property<string>("Localidade")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -47,15 +40,11 @@ namespace ApiAndreVeiculos_Endereco.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TipoLogradouro")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Uf")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CEP");
 
                     b.ToTable("Endereco");
                 });

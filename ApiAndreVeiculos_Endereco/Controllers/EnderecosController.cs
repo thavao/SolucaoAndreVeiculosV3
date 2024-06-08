@@ -34,7 +34,7 @@ namespace ApiAndreVeiculos_Endereco.Controllers
 
         // GET: api/Enderecos/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Endereco>> GetEndereco(int id)
+        public async Task<ActionResult<Endereco>> GetEndereco(string id)
         {
           if (_context.Endereco == null)
           {
@@ -53,9 +53,9 @@ namespace ApiAndreVeiculos_Endereco.Controllers
         // PUT: api/Enderecos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEndereco(int id, Endereco endereco)
+        public async Task<IActionResult> PutEndereco(string id, Endereco endereco)
         {
-            if (id != endereco.Id)
+            if (id != endereco.CEP)
             {
                 return BadRequest();
             }
@@ -91,14 +91,28 @@ namespace ApiAndreVeiculos_Endereco.Controllers
               return Problem("Entity set 'ApiAndreVeiculos_EnderecoContext.Endereco'  is null.");
           }
             _context.Endereco.Add(endereco);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (EnderecoExists(endereco.CEP))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-            return CreatedAtAction("GetEndereco", new { id = endereco.Id }, endereco);
+            return CreatedAtAction("GetEndereco", new { id = endereco.CEP }, endereco);
         }
 
         // DELETE: api/Enderecos/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEndereco(int id)
+        public async Task<IActionResult> DeleteEndereco(string id)
         {
             if (_context.Endereco == null)
             {
@@ -116,9 +130,9 @@ namespace ApiAndreVeiculos_Endereco.Controllers
             return NoContent();
         }
 
-        private bool EnderecoExists(int id)
+        private bool EnderecoExists(string id)
         {
-            return (_context.Endereco?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Endereco?.Any(e => e.CEP == id)).GetValueOrDefault();
         }
     }
 }

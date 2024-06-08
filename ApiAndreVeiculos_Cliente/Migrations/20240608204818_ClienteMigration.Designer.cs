@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiAndreVeiculos_Cliente.Migrations
 {
     [DbContext(typeof(ApiAndreVeiculos_ClienteContext))]
-    [Migration("20240608182021_ClienteMigration")]
+    [Migration("20240608204818_ClienteMigration")]
     partial class ClienteMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,7 +31,7 @@ namespace ApiAndreVeiculos_Cliente.Migrations
 
                     b.Property<string>("CEP")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DataNascimento")
                         .HasColumnType("datetime2");
@@ -56,50 +56,7 @@ namespace ApiAndreVeiculos_Cliente.Migrations
 
                     b.HasKey("Documento");
 
-                    b.HasIndex("CEP");
-
                     b.ToTable("Cliente");
-                });
-
-            modelBuilder.Entity("Models.Endereco", b =>
-                {
-                    b.Property<string>("CEP")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Bairro")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Cidade")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Logradouro")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TipoLogradouro")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Uf")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CEP");
-
-                    b.ToTable("Endereco");
-                });
-
-            modelBuilder.Entity("Models.Cliente", b =>
-                {
-                    b.HasOne("Models.Endereco", "Endereco")
-                        .WithMany()
-                        .HasForeignKey("CEP")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Endereco");
                 });
 #pragma warning restore 612, 618
         }

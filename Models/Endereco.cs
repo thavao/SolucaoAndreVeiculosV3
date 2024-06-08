@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,12 +10,19 @@ namespace Models
 {
     public class Endereco
     {
-        [Key]
+        [JsonProperty("cep"), Key]
         public string CEP { get; set; }
-        public  string Logradouro { get; set; }
+
+        [JsonProperty("logradouro")]
+        public string Logradouro { get; set; }
+
+        [JsonProperty("bairro")]
         public string Bairro { get; set; }
-        public string TipoLogradouro { get; set; }
+
+        [JsonProperty("localidade")]
+        public string Localidade { get; set; }
+
+        [JsonProperty("uf")]
         public string Uf { get; set; }
-        public string Cidade { get; set; }
     }
 }

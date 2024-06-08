@@ -30,7 +30,13 @@ namespace ApiAndreVeiculos_Cliente.Controllers
             {
                 return NotFound();
             }
-            return await _context.Cliente.ToListAsync();
+            var clientes = await _context.Cliente.ToListAsync();
+            foreach (Cliente cliente in clientes)
+            {
+                Endereco endereco = await _context.Endereco.Where(e => cliente.CEP == e.CEP).FirstAsync();
+                cliente.Endereco = endereco;
+            }
+            return clientes;
         }
 
         // GET: api/Clientes/5
@@ -83,7 +89,6 @@ namespace ApiAndreVeiculos_Cliente.Controllers
         }
 
         // POST: api/Clientes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(ClienteDTO clienteDTO)
         {
@@ -92,8 +97,8 @@ namespace ApiAndreVeiculos_Cliente.Controllers
                 return Problem("Entity set 'ApiAndreVeiculos_ClienteContext.Cliente'  is null.");
             }
             Cliente cliente = new Cliente(clienteDTO);
-            //Endereco endereco = await _context Where(e=> cliente.CEP == e.CEP).FirstAsync();
-            //cliente.Endereco = endereco;
+            Endereco endereco = await _context.Endereco.Where(e => cliente.CEP == e.CEP).FirstAsync();
+            cliente.Endereco = endereco;
             _context.Cliente.Add(cliente);
             try
             {
