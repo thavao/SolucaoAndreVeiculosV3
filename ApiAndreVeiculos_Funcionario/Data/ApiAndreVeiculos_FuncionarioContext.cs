@@ -15,5 +15,7 @@ namespace ApiAndreVeiculos_Funcionario.Data
         }
 
         public DbSet<Models.Funcionario> Funcionario { get; set; } = default!;
+        public DbSet<Models.Endereco> Endereco { get; set; } = default!;
+        public DbSet<Models.Cargo> Cargo { get; set; } = default!;
     }
 }

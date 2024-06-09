@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiAndreVeiculos_Funcionario.Data;
 using Models;
+using Models.DTO;
 
 namespace ApiAndreVeiculos_Funcionario.Controllers
 {
@@ -25,27 +26,40 @@ namespace ApiAndreVeiculos_Funcionario.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Funcionario>>> GetFuncionario()
         {
-          if (_context.Funcionario == null)
-          {
-              return NotFound();
-          }
-            return await _context.Funcionario.ToListAsync();
+            if (_context.Funcionario == null)
+            {
+                return NotFound();
+            }
+            var funcionarios = await _context.Funcionario.ToListAsync();
+
+            foreach (var f in funcionarios)
+            {
+                if (f.CEP == "" || f.CEP == null)
+                    continue;
+
+                f.Endereco = await _context.Endereco.FindAsync(f.CEP);
+            }
+
+            return funcionarios;
         }
 
         // GET: api/Funcionarios/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Funcionario>> GetFuncionario(string id)
         {
-          if (_context.Funcionario == null)
-          {
-              return NotFound();
-          }
+            if (_context.Funcionario == null)
+            {
+                return NotFound();
+            }
             var funcionario = await _context.Funcionario.FindAsync(id);
 
             if (funcionario == null)
             {
                 return NotFound();
             }
+            funcionario.Endereco = await _context.Endereco.FindAsync(funcionario.CEP);
+
+
 
             return funcionario;
         }
@@ -53,14 +67,13 @@ namespace ApiAndreVeiculos_Funcionario.Controllers
         // PUT: api/Funcionarios/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFuncionario(string id, Funcionario funcionario)
+        public async Task<IActionResult> PutFuncionario(string id, FuncionarioDTO funcionarioDTO)
         {
-            if (id != funcionario.Documento)
+            if (id != funcionarioDTO.Documento)
             {
                 return BadRequest();
             }
-
-            _context.Entry(funcionario).State = EntityState.Modified;
+            _context.Entry(funcionarioDTO).State = EntityState.Modified;
 
             try
             {
@@ -84,12 +97,14 @@ namespace ApiAndreVeiculos_Funcionario.Controllers
         // POST: api/Funcionarios
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Funcionario>> PostFuncionario(Funcionario funcionario)
+        public async Task<ActionResult<Funcionario>> PostFuncionario(FuncionarioDTO funcionarioDTO)
         {
-          if (_context.Funcionario == null)
-          {
-              return Problem("Entity set 'ApiAndreVeiculos_FuncionarioContext.Funcionario'  is null.");
-          }
+            if (_context.Funcionario == null)
+            {
+                return Problem("Entity set 'ApiAndreVeiculos_FuncionarioContext.Funcionario'  is null.");
+            }
+            Funcionario funcionario = new(funcionarioDTO);
+            funcionario.Endereco = await _context.Endereco.FindAsync(funcionario.CEP);
             _context.Funcionario.Add(funcionario);
             try
             {
