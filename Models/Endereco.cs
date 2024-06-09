@@ -24,5 +24,30 @@ namespace Models
 
         [JsonProperty("uf")]
         public string Uf { get; set; }
+
+        public Endereco() { }
+        public Endereco(HttpClient httpClient, string cep)
+        {
+            string url = $"http://viacep.com.br/ws/{cep}/json/";
+            HttpResponseMessage resposta = httpClient.GetAsync(url).Result;
+
+            if (resposta.IsSuccessStatusCode)
+            {
+                var json = resposta.Content.ReadAsStringAsync().Result;
+                var enderecoViaCep = JsonConvert.DeserializeObject<Endereco>(json);
+                if (enderecoViaCep == null || enderecoViaCep.CEP == null)
+                {
+                    throw new Exception("Endereço ou CEP nullo");
+                }
+                else
+                {
+                    this.CEP = enderecoViaCep.CEP;
+                    this.Logradouro = enderecoViaCep.Logradouro;
+                    this.Bairro = enderecoViaCep.Bairro;
+                    this.Localidade = enderecoViaCep.Localidade;
+                    this.Uf = enderecoViaCep.Uf;
+                }
+            }
+        }
     }
 }

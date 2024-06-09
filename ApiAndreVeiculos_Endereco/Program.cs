@@ -6,7 +6,7 @@ builder.Services.AddDbContext<ApiAndreVeiculos_EnderecoContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ApiAndreVeiculos_EnderecoContext") ?? throw new InvalidOperationException("Connection string 'ApiAndreVeiculos_EnderecoContext' not found.")));
 
 // Add services to the container.
-
+builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

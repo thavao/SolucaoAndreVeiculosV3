@@ -15,32 +15,53 @@ namespace ApiAndreVeiculos_Endereco.Controllers
     public class EnderecosController : ControllerBase
     {
         private readonly ApiAndreVeiculos_EnderecoContext _context;
+        private readonly HttpClient _httpClient;
 
-        public EnderecosController(ApiAndreVeiculos_EnderecoContext context)
+        public EnderecosController(ApiAndreVeiculos_EnderecoContext context, HttpClient httpClient)
         {
             _context = context;
+            _httpClient = httpClient;
         }
 
         // GET: api/Enderecos
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Endereco>>> GetEndereco()
         {
-          if (_context.Endereco == null)
-          {
-              return NotFound();
-          }
+            if (_context.Endereco == null)
+            {
+                return NotFound();
+            }
             return await _context.Endereco.ToListAsync();
         }
 
         // GET: api/Enderecos/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Endereco>> GetEndereco(string id)
+        [HttpGet("{cep}")]
+        public async Task<ActionResult<Endereco>> GetEndereco(string cep)
         {
-          if (_context.Endereco == null)
-          {
-              return NotFound();
-          }
-            var endereco = await _context.Endereco.FindAsync(id);
+            if (_context.Endereco == null)
+            {
+                return NotFound();
+            }
+
+            var endereco = await _context.Endereco.FindAsync(cep);
+
+            if (endereco == null)
+            {
+                return NotFound();
+            }
+
+            return endereco;
+        }
+
+        [HttpGet("viaCep/{cep}")]
+        public ActionResult<Endereco> GetEnderecoViaCep(string cep)
+        {
+            if (_context.Endereco == null)
+            {
+                return NotFound();
+            }
+
+            Endereco endereco = new(_httpClient, cep);
 
             if (endereco == null)
             {
@@ -86,10 +107,38 @@ namespace ApiAndreVeiculos_Endereco.Controllers
         [HttpPost]
         public async Task<ActionResult<Endereco>> PostEndereco(Endereco endereco)
         {
-          if (_context.Endereco == null)
-          {
-              return Problem("Entity set 'ApiAndreVeiculos_EnderecoContext.Endereco'  is null.");
-          }
+            if (_context.Endereco == null)
+            {
+                return Problem("Entity set 'ApiAndreVeiculos_EnderecoContext.Endereco'  is null.");
+            }
+            _context.Endereco.Add(endereco);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (EnderecoExists(endereco.CEP))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetEndereco", new { id = endereco.CEP }, endereco);
+        }
+
+        [HttpPost("/post/cep/{cep}")]
+        public async Task<ActionResult<Endereco>> PostEndereco(string cep)
+        {
+            if (_context.Endereco == null)
+            {
+                return Problem("Entity set 'ApiAndreVeiculos_EnderecoContext.Endereco'  is null.");
+            }
+            Endereco endereco = new Endereco(_httpClient, cep);
             _context.Endereco.Add(endereco);
             try
             {
