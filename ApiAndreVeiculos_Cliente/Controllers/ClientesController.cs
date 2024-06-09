@@ -59,13 +59,15 @@ namespace ApiAndreVeiculos_Cliente.Controllers
 
         // PUT: api/Clientes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCliente(string id, Cliente cliente)
+        [HttpPut("{documento}")]
+        public async Task<IActionResult> PutCliente(string documento, ClienteDTO clienteDTO)
         {
-            if (id != cliente.Documento)
+            if (documento != clienteDTO.Documento)
             {
                 return BadRequest();
             }
+            Cliente cliente = new(clienteDTO);
+            cliente.Endereco = await _context.Endereco.Where(e => cliente.CEP == e.CEP).FirstAsync();
 
             _context.Entry(cliente).State = EntityState.Modified;
 
@@ -75,7 +77,7 @@ namespace ApiAndreVeiculos_Cliente.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ClienteExists(id))
+                if (!ClienteExists(documento))
                 {
                     return NotFound();
                 }
