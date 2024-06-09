@@ -36,7 +36,7 @@ namespace ApiAndreVeiculos_Funcionario.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cargo");
+                    b.ToTable("Cargo", (string)null);
                 });
 
             modelBuilder.Entity("Models.Funcionario", b =>
@@ -79,7 +79,7 @@ namespace ApiAndreVeiculos_Funcionario.Migrations
 
                     b.HasIndex("CargoId");
 
-                    b.ToTable("Funcionario");
+                    b.ToTable("Funcionario", (string)null);
                 });
 
             modelBuilder.Entity("Models.Funcionario", b =>
