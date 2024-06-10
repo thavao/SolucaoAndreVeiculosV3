@@ -50,5 +50,36 @@ namespace Models
                 }
             }
         }
+
+        public async static Task<Endereco> ConstruirEndereco(HttpClient httpClient, string cep)
+        {
+            string url = $"https://localhost:7055/api/Enderecos/{cep}";
+            HttpResponseMessage resposta = await httpClient.GetAsync(url);
+
+            if (resposta.IsSuccessStatusCode)
+            {
+                var json = await resposta.Content.ReadAsStringAsync();
+                var enderecoPelaApi = JsonConvert.DeserializeObject<Endereco>(json);
+
+                if (enderecoPelaApi == null || enderecoPelaApi.CEP == null)
+                {
+                    throw new Exception("Endereço ou CEP nullo");
+                }
+                else
+                {
+                    Endereco e = new()
+                    {
+                        CEP = enderecoPelaApi.CEP,
+                        Logradouro = enderecoPelaApi.Logradouro,
+                        Bairro = enderecoPelaApi.Bairro,
+                        Localidade = enderecoPelaApi.Localidade,
+                        Uf = enderecoPelaApi.Uf
+                    };
+                    return e;
+                }
+            }
+            return null;
+        }
+
     }
 }

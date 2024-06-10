@@ -51,14 +51,16 @@ namespace ApiAndreVeiculos_Cliente.Controllers
             }
 
             var cliente = await _context.Cliente.FindAsync(id);
-            Endereco endereco = await _context.Endereco.Where(e => cliente.CEP == e.CEP).FirstAsync();
-            cliente.Endereco = endereco;
-            //await cliente.ConstruirEndereco(_httpClient);
+            /*Endereco endereco = await _context.Endereco.Where(e => cliente.CEP == e.CEP).FirstAsync();
+            cliente.Endereco = endereco;*/
+
 
             if (cliente == null)
             {
                 return NotFound();
             }
+
+            cliente.Endereco = await Endereco.ConstruirEndereco(_httpClient, cliente.CEP);
 
             return cliente;
         }
