@@ -16,10 +16,12 @@ namespace ApiAndreVeiculos_Cliente.Controllers
     public class ClientesController : ControllerBase
     {
         private readonly ApiAndreVeiculos_ClienteContext _context;
+        private readonly HttpClient _httpClient;
 
-        public ClientesController(ApiAndreVeiculos_ClienteContext context)
+        public ClientesController(ApiAndreVeiculos_ClienteContext context, HttpClient httpClient)
         {
             _context = context;
+            _httpClient = httpClient;
         }
 
         // GET: api/Clientes
@@ -47,7 +49,11 @@ namespace ApiAndreVeiculos_Cliente.Controllers
             {
                 return NotFound();
             }
+
             var cliente = await _context.Cliente.FindAsync(id);
+            Endereco endereco = await _context.Endereco.Where(e => cliente.CEP == e.CEP).FirstAsync();
+            cliente.Endereco = endereco;
+            //await cliente.ConstruirEndereco(_httpClient);
 
             if (cliente == null)
             {
@@ -99,7 +105,7 @@ namespace ApiAndreVeiculos_Cliente.Controllers
                 return Problem("Entity set 'ApiAndreVeiculos_ClienteContext.Cliente'  is null.");
             }
             Cliente cliente = new Cliente(clienteDTO);
-            Endereco endereco = await _context.Endereco.Where(e => cliente.CEP == e.CEP).FirstAsync();
+            Endereco endereco = new(_httpClient, cliente.CEP);
             cliente.Endereco = endereco;
             _context.Cliente.Add(cliente);
             try
@@ -122,14 +128,14 @@ namespace ApiAndreVeiculos_Cliente.Controllers
         }
 
         // DELETE: api/Clientes/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCliente(string id)
+        [HttpDelete("{documento}")]
+        public async Task<IActionResult> DeleteCliente(string documento)
         {
             if (_context.Cliente == null)
             {
                 return NotFound();
             }
-            var cliente = await _context.Cliente.FindAsync(id);
+            var cliente = await _context.Cliente.FindAsync(documento);
             if (cliente == null)
             {
                 return NotFound();
@@ -141,9 +147,9 @@ namespace ApiAndreVeiculos_Cliente.Controllers
             return NoContent();
         }
 
-        private bool ClienteExists(string id)
+        private bool ClienteExists(string documento)
         {
-            return (_context.Cliente?.Any(e => e.Documento == id)).GetValueOrDefault();
+            return (_context.Cliente?.Any(e => e.Documento == documento)).GetValueOrDefault();
         }
     }
 }
