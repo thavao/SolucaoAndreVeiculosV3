@@ -73,8 +73,8 @@ namespace ApiAndreVeiculos_Endereco.Controllers
 
         // PUT: api/Enderecos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEndereco(string id, Endereco endereco)
+        [HttpPut("{cep}")]
+        public async Task<IActionResult> PutEndereco(string cep, Endereco endereco)
         {
             if (id != endereco.CEP)
             {
@@ -131,7 +131,7 @@ namespace ApiAndreVeiculos_Endereco.Controllers
             return CreatedAtAction("GetEndereco", new { id = endereco.CEP }, endereco);
         }
 
-        [HttpPost("/post/cep/{cep}")]
+        [HttpPost("/ViaCep/{cep}")]
         public async Task<ActionResult<Endereco>> PostEndereco(string cep)
         {
             if (_context.Endereco == null)
@@ -160,8 +160,8 @@ namespace ApiAndreVeiculos_Endereco.Controllers
         }
 
         // DELETE: api/Enderecos/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEndereco(string id)
+        [HttpDelete("{cep}")]
+        public async Task<IActionResult> DeleteEndereco(string cep)
         {
             if (_context.Endereco == null)
             {
