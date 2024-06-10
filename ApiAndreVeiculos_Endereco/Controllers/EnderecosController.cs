@@ -76,7 +76,7 @@ namespace ApiAndreVeiculos_Endereco.Controllers
         [HttpPut("{cep}")]
         public async Task<IActionResult> PutEndereco(string cep, Endereco endereco)
         {
-            if (id != endereco.CEP)
+            if (cep != endereco.CEP)
             {
                 return BadRequest();
             }
@@ -89,7 +89,7 @@ namespace ApiAndreVeiculos_Endereco.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!EnderecoExists(id))
+                if (!EnderecoExists(cep))
                 {
                     return NotFound();
                 }
@@ -167,7 +167,7 @@ namespace ApiAndreVeiculos_Endereco.Controllers
             {
                 return NotFound();
             }
-            var endereco = await _context.Endereco.FindAsync(id);
+            var endereco = await _context.Endereco.FindAsync(cep);
             if (endereco == null)
             {
                 return NotFound();
