@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiAndreVeiculos_Endereco.Data;
+using ApiAndreVeiculos_Endereco;
 using Models;
 
 namespace ApiAndreVeiculos_Endereco.Controllers
@@ -16,12 +17,16 @@ namespace ApiAndreVeiculos_Endereco.Controllers
     {
         private readonly ApiAndreVeiculos_EnderecoContext _context;
         private readonly HttpClient _httpClient;
+		private readonly EnderecoService _enderecoService;
 
-        public EnderecosController(ApiAndreVeiculos_EnderecoContext context, HttpClient httpClient)
+
+		public EnderecosController(ApiAndreVeiculos_EnderecoContext context, HttpClient httpClient, EnderecoService enderecoService)
         {
             _context = context;
             _httpClient = httpClient;
-        }
+			_enderecoService = enderecoService;
+
+		}
 
         // GET: api/Enderecos
         [HttpGet]
@@ -115,6 +120,7 @@ namespace ApiAndreVeiculos_Endereco.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                _enderecoService.InserirUm(endereco);
             }
             catch (DbUpdateException)
             {
@@ -143,8 +149,10 @@ namespace ApiAndreVeiculos_Endereco.Controllers
             try
             {
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
+				_enderecoService.InserirUm(endereco);
+
+			}
+			catch (DbUpdateException)
             {
                 if (EnderecoExists(endereco.CEP))
                 {

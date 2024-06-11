@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiAndreVeiculos_Endereco",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiAndreVeiculos_Carro", "ApiAndreVeiculos_Carro\ApiAndreVeiculos_Carro.csproj", "{162DEBE5-F936-4D44-A059-E5D4C35A2EE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiAndreVeiculos_Servico", "ApiAndreVeiculos_Servico\ApiAndreVeiculos_Servico.csproj", "{A2B87639-A461-430F-83FF-CAE0C67E0C0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiAndreVeiculos_Servico", "ApiAndreVeiculos_Servico\ApiAndreVeiculos_Servico.csproj", "{A2B87639-A461-430F-83FF-CAE0C67E0C0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiAndreVeiculos_CarroServico", "ApiAndreVeiculos_CarroServico\ApiAndreVeiculos_CarroServico.csproj", "{AE8C3B0B-A021-4802-84E1-BA99323B597C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiAndreVeiculos_CarroServico", "ApiAndreVeiculos_CarroServico\ApiAndreVeiculos_CarroServico.csproj", "{AE8C3B0B-A021-4802-84E1-BA99323B597C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{4795E6E6-E705-4197-9DAC-1B9EE2CD18E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{AE8C3B0B-A021-4802-84E1-BA99323B597C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE8C3B0B-A021-4802-84E1-BA99323B597C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE8C3B0B-A021-4802-84E1-BA99323B597C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4795E6E6-E705-4197-9DAC-1B9EE2CD18E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4795E6E6-E705-4197-9DAC-1B9EE2CD18E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4795E6E6-E705-4197-9DAC-1B9EE2CD18E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4795E6E6-E705-4197-9DAC-1B9EE2CD18E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
