@@ -69,19 +69,6 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CarroServico",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CarroServico", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Cartao",
                 columns: table => new
                 {
@@ -106,24 +93,6 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categoria", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Cliente",
-                columns: table => new
-                {
-                    Documento = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Renda = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataNascimento = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CEP = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NumeroEndereco = table.Column<int>(type: "int", nullable: false),
-                    Telefone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cliente", x => x.Documento);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,32 +153,6 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Funcionario",
-                columns: table => new
-                {
-                    Documento = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CargoId = table.Column<int>(type: "int", nullable: false),
-                    ValorComissao = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Comissao = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataNascimento = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CEP = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NumeroEndereco = table.Column<int>(type: "int", nullable: false),
-                    Telefone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Funcionario", x => x.Documento);
-                    table.ForeignKey(
-                        name: "FK_Funcionario_Cargo_CargoId",
-                        column: x => x.CargoId,
-                        principalTable: "Cargo",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Compra",
                 columns: table => new
                 {
@@ -253,13 +196,14 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Dependente",
+                name: "Cliente",
                 columns: table => new
                 {
                     Documento = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClienteDocumento = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Renda = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DataNascimento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EnderecoCEP = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CEP = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NumeroEndereco = table.Column<int>(type: "int", nullable: false),
                     Telefone = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -267,60 +211,69 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Dependente", x => x.Documento);
+                    table.PrimaryKey("PK_Cliente", x => x.Documento);
                     table.ForeignKey(
-                        name: "FK_Dependente_Cliente_ClienteDocumento",
-                        column: x => x.ClienteDocumento,
-                        principalTable: "Cliente",
-                        principalColumn: "Documento");
+                        name: "FK_Cliente_Endereco_EnderecoCEP",
+                        column: x => x.EnderecoCEP,
+                        principalTable: "Endereco",
+                        principalColumn: "CEP",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PendenciaFinanceira",
+                name: "Funcionario",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    DataPendencia = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataCobranca = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false),
-                    ClienteDocumento = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Documento = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CargoId = table.Column<int>(type: "int", nullable: false),
+                    ValorComissao = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Comissao = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataNascimento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EnderecoCEP = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CEP = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NumeroEndereco = table.Column<int>(type: "int", nullable: false),
+                    Telefone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PendenciaFinanceira", x => x.Id);
+                    table.PrimaryKey("PK_Funcionario", x => x.Documento);
                     table.ForeignKey(
-                        name: "FK_PendenciaFinanceira_Cliente_ClienteDocumento",
-                        column: x => x.ClienteDocumento,
-                        principalTable: "Cliente",
-                        principalColumn: "Documento");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AceiteTermoDeUso",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ClienteDocumento = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TermoDeUsoId = table.Column<int>(type: "int", nullable: false),
-                    DataAceite = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AceiteTermoDeUso", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AceiteTermoDeUso_Cliente_ClienteDocumento",
-                        column: x => x.ClienteDocumento,
-                        principalTable: "Cliente",
-                        principalColumn: "Documento",
+                        name: "FK_Funcionario_Cargo_CargoId",
+                        column: x => x.CargoId,
+                        principalTable: "Cargo",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AceiteTermoDeUso_TermoDeUso_TermoDeUsoId",
-                        column: x => x.TermoDeUsoId,
-                        principalTable: "TermoDeUso",
+                        name: "FK_Funcionario_Endereco_EnderecoCEP",
+                        column: x => x.EnderecoCEP,
+                        principalTable: "Endereco",
+                        principalColumn: "CEP");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CarroServico",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CarroPlaca = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ServicoId = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CarroServico", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CarroServico_Carro_CarroPlaca",
+                        column: x => x.CarroPlaca,
+                        principalTable: "Carro",
+                        principalColumn: "Placa");
+                    table.ForeignKey(
+                        name: "FK_CarroServico_Servico_ServicoId",
+                        column: x => x.ServicoId,
+                        principalTable: "Servico",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -353,6 +306,7 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                     Cnh = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DataNascimento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EnderecoCEP = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CEP = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NumeroEndereco = table.Column<int>(type: "int", nullable: false),
                     Telefone = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -366,6 +320,92 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                         column: x => x.Cnh,
                         principalTable: "CNH",
                         principalColumn: "Cnh");
+                    table.ForeignKey(
+                        name: "FK_Condutor_Endereco_EnderecoCEP",
+                        column: x => x.EnderecoCEP,
+                        principalTable: "Endereco",
+                        principalColumn: "CEP",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AceiteTermoDeUso",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClienteDocumento = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TermoDeUsoId = table.Column<int>(type: "int", nullable: false),
+                    DataAceite = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AceiteTermoDeUso", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AceiteTermoDeUso_Cliente_ClienteDocumento",
+                        column: x => x.ClienteDocumento,
+                        principalTable: "Cliente",
+                        principalColumn: "Documento",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AceiteTermoDeUso_TermoDeUso_TermoDeUsoId",
+                        column: x => x.TermoDeUsoId,
+                        principalTable: "TermoDeUso",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Dependente",
+                columns: table => new
+                {
+                    Documento = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClienteDocumento = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataNascimento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EnderecoCEP = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CEP = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NumeroEndereco = table.Column<int>(type: "int", nullable: false),
+                    Telefone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dependente", x => x.Documento);
+                    table.ForeignKey(
+                        name: "FK_Dependente_Cliente_ClienteDocumento",
+                        column: x => x.ClienteDocumento,
+                        principalTable: "Cliente",
+                        principalColumn: "Documento");
+                    table.ForeignKey(
+                        name: "FK_Dependente_Endereco_EnderecoCEP",
+                        column: x => x.EnderecoCEP,
+                        principalTable: "Endereco",
+                        principalColumn: "CEP",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PendenciaFinanceira",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DataPendencia = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataCobranca = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    ClienteDocumento = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PendenciaFinanceira", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PendenciaFinanceira_Cliente_ClienteDocumento",
+                        column: x => x.ClienteDocumento,
+                        principalTable: "Cliente",
+                        principalColumn: "Documento");
                 });
 
             migrationBuilder.CreateTable(
@@ -508,6 +548,21 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                 column: "TermoDeUsoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CarroServico_CarroPlaca",
+                table: "CarroServico",
+                column: "CarroPlaca");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarroServico_ServicoId",
+                table: "CarroServico",
+                column: "ServicoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cliente_EnderecoCEP",
+                table: "Cliente",
+                column: "EnderecoCEP");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CNH_CategoriaId",
                 table: "CNH",
                 column: "CategoriaId");
@@ -523,9 +578,19 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                 column: "Cnh");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Condutor_EnderecoCEP",
+                table: "Condutor",
+                column: "EnderecoCEP");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Dependente_ClienteDocumento",
                 table: "Dependente",
                 column: "ClienteDocumento");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Dependente_EnderecoCEP",
+                table: "Dependente",
+                column: "EnderecoCEP");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Financiamento_BancoCNPJ",
@@ -541,6 +606,11 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                 name: "IX_Funcionario_CargoId",
                 table: "Funcionario",
                 column: "CargoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Funcionario_EnderecoCEP",
+                table: "Funcionario",
+                column: "EnderecoCEP");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pagamento_BoletoId",
@@ -618,9 +688,6 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                 name: "Dependente");
 
             migrationBuilder.DropTable(
-                name: "Endereco");
-
-            migrationBuilder.DropTable(
                 name: "Financiamento");
 
             migrationBuilder.DropTable(
@@ -630,10 +697,10 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                 name: "Seguro");
 
             migrationBuilder.DropTable(
-                name: "Servico");
+                name: "TermoDeUso");
 
             migrationBuilder.DropTable(
-                name: "TermoDeUso");
+                name: "Servico");
 
             migrationBuilder.DropTable(
                 name: "Banco");
@@ -661,6 +728,9 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
 
             migrationBuilder.DropTable(
                 name: "Cargo");
+
+            migrationBuilder.DropTable(
+                name: "Endereco");
 
             migrationBuilder.DropTable(
                 name: "Boleto");

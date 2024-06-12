@@ -12,7 +12,7 @@ using _01_ApiAndreVeiculos_Geral.Data;
 namespace _01_ApiAndreVeiculos_Geral.Migrations
 {
     [DbContext(typeof(_01_ApiAndreVeiculos_GeralContext))]
-    [Migration("20240612191337_GeralMigration")]
+    [Migration("20240612222257_GeralMigration")]
     partial class GeralMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -150,10 +150,20 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("CarroPlaca")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ServicoId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CarroPlaca");
+
+                    b.HasIndex("ServicoId");
 
                     b.ToTable("CarroServico");
                 });
@@ -213,6 +223,10 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EnderecoCEP")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -228,6 +242,8 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Documento");
+
+                    b.HasIndex("EnderecoCEP");
 
                     b.ToTable("Cliente");
                 });
@@ -309,6 +325,10 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EnderecoCEP")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -323,6 +343,8 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                     b.HasKey("Documento");
 
                     b.HasIndex("Cnh");
+
+                    b.HasIndex("EnderecoCEP");
 
                     b.ToTable("Condutor");
                 });
@@ -346,6 +368,10 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EnderecoCEP")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -360,6 +386,8 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                     b.HasKey("Documento");
 
                     b.HasIndex("ClienteDocumento");
+
+                    b.HasIndex("EnderecoCEP");
 
                     b.ToTable("Dependente");
                 });
@@ -438,6 +466,9 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EnderecoCEP")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -455,6 +486,8 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                     b.HasKey("Documento");
 
                     b.HasIndex("CargoId");
+
+                    b.HasIndex("EnderecoCEP");
 
                     b.ToTable("Funcionario");
                 });
@@ -695,6 +728,34 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                     b.Navigation("TermoDeUso");
                 });
 
+            modelBuilder.Entity("Models.CarroServico", b =>
+                {
+                    b.HasOne("Models.Carro", "Carro")
+                        .WithMany()
+                        .HasForeignKey("CarroPlaca");
+
+                    b.HasOne("Models.Servico", "Servico")
+                        .WithMany()
+                        .HasForeignKey("ServicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Carro");
+
+                    b.Navigation("Servico");
+                });
+
+            modelBuilder.Entity("Models.Cliente", b =>
+                {
+                    b.HasOne("Models.Endereco", "Endereco")
+                        .WithMany()
+                        .HasForeignKey("EnderecoCEP")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Endereco");
+                });
+
             modelBuilder.Entity("Models.CNH", b =>
                 {
                     b.HasOne("Models.Categoria", "Categoria")
@@ -721,7 +782,15 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                         .WithMany()
                         .HasForeignKey("Cnh");
 
+                    b.HasOne("Models.Endereco", "Endereco")
+                        .WithMany()
+                        .HasForeignKey("EnderecoCEP")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("CNH");
+
+                    b.Navigation("Endereco");
                 });
 
             modelBuilder.Entity("Models.Dependente", b =>
@@ -730,7 +799,15 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                         .WithMany()
                         .HasForeignKey("ClienteDocumento");
 
+                    b.HasOne("Models.Endereco", "Endereco")
+                        .WithMany()
+                        .HasForeignKey("EnderecoCEP")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Cliente");
+
+                    b.Navigation("Endereco");
                 });
 
             modelBuilder.Entity("Models.Financiamento", b =>
@@ -758,7 +835,13 @@ namespace _01_ApiAndreVeiculos_Geral.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Models.Endereco", "Endereco")
+                        .WithMany()
+                        .HasForeignKey("EnderecoCEP");
+
                     b.Navigation("Cargo");
+
+                    b.Navigation("Endereco");
                 });
 
             modelBuilder.Entity("Models.Pagamento", b =>
