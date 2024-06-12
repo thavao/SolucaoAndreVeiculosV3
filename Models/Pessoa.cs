@@ -15,8 +15,6 @@ namespace Models
         public string Documento { get; set; }
         public string Nome { get; set; }
         public DateTime DataNascimento { get; set; }
-        
-        [NotMapped]
         public Endereco Endereco { get; set; }
         public string CEP { get; set; }
         public int NumeroEndereco { get; set; }
