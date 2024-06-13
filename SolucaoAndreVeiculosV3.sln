@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01_ApiAndreVeiculos_Geral", "01_ApiAndreVeiculos_Geral\01_ApiAndreVeiculos_Geral.csproj", "{897AB0FC-BE19-4B3E-B940-67485ABCDF15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndreVeiculos_Test", "AndreVeiculos_Test\AndreVeiculos_Test.csproj", "{BB6888C6-D9E7-42D3-BA7B-CDD80E0EBA8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{897AB0FC-BE19-4B3E-B940-67485ABCDF15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{897AB0FC-BE19-4B3E-B940-67485ABCDF15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{897AB0FC-BE19-4B3E-B940-67485ABCDF15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB6888C6-D9E7-42D3-BA7B-CDD80E0EBA8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB6888C6-D9E7-42D3-BA7B-CDD80E0EBA8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB6888C6-D9E7-42D3-BA7B-CDD80E0EBA8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB6888C6-D9E7-42D3-BA7B-CDD80E0EBA8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
