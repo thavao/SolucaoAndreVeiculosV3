@@ -1,5 +1,4 @@
-﻿using Models.Interfaces;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace Models
