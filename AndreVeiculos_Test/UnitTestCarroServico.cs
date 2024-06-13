@@ -124,7 +124,7 @@ namespace AndreVeiculos_Test
         }
 
         [Fact]
-        public void TestGet()
+        public void TestGetById()
         {
             IniciarBanco();
             using (var context = new ApiAndreVeiculos_CarroServicoContext(options))
