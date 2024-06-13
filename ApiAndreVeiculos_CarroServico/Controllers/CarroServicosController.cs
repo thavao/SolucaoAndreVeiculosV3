@@ -30,7 +30,10 @@ namespace ApiAndreVeiculos_CarroServico.Controllers
             {
                 return NotFound();
             }
-            return await _context.CarroServico.ToListAsync();
+            var carrosServicos = await _context.CarroServico
+                .Include(cs => cs.Carro)
+                .Include(cs => cs.Servico).ToListAsync();
+            return carrosServicos;
         }
 
         // GET: api/CarroServicos/5
@@ -101,12 +104,12 @@ namespace ApiAndreVeiculos_CarroServico.Controllers
                 carroServico.Carro = await _context.Carro.FindAsync(carroServicoDTO.CarroPlaca);
                 carroServico.Servico = await _context.Servico.FindAsync(carroServicoDTO.ServicoId);
 
-                
+
 
                 _context.CarroServico.Add(carroServico);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetCarroServico", new { id = carroServico.Id }, carroServico);
+                return carroServico;
             }
             catch (Exception)
             {
