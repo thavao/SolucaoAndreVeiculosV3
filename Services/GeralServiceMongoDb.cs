@@ -28,14 +28,16 @@ namespace Services
             _colecao.InsertOne(item);
             return item;
         }
-        public void Update(T item, string id)
+        public T Update(T item, string id)
         {
             _colecao.ReplaceOne(Builders<T>.Filter.Eq("_id", new ObjectId(id)), item);
+            return Get(id);
         }
 
-        public void Remove(string id)
+        public bool Remove(string id)
         {
             _colecao.DeleteOne(Builders<T>.Filter.Eq("_id", new ObjectId(id)));
+            return true;
         }
 
     }
