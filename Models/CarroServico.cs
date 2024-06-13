@@ -11,13 +11,9 @@ namespace Models
     public class CarroServico
     {
         public int Id { get; set; }
-        [NotMapped]
         public Carro Carro { get; set; }
-        [NotMapped]
         public Servico Servico { get; set; }
-
         public bool Status { get; set; }
-
         public CarroServico() { }
         public CarroServico(CarroServicoDTO dto)
         {

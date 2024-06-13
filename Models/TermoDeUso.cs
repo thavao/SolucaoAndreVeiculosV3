@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.DTO
+namespace Models
 {
-    public class CarroServicoDTO
+    public class TermoDeUso
     {
         public int Id { get; set; }
-        public string CarroPlaca { get; set; }
-        public int ServicoId { get; set; }
+        public string Texto { get; set; }
+        public int Versao { get; set; }
+        public DateTime DataCadastro { get; set; }
         public bool Status { get; set; }
     }
 }

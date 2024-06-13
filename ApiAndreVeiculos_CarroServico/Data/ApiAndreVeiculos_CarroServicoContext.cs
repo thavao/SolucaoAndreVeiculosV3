@@ -15,5 +15,7 @@ namespace ApiAndreVeiculos_CarroServico.Data
         }
 
         public DbSet<Models.CarroServico> CarroServico { get; set; } = default!;
+        public DbSet<Models.Carro> Carro { get; set; } = default!;
+        public DbSet<Models.Servico> Servico { get; set; } = default!;
     }
 }

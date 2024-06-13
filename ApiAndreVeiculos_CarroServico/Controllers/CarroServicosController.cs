@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiAndreVeiculos_CarroServico.Data;
 using Models;
+using Models.DTO;
 
 namespace ApiAndreVeiculos_CarroServico.Controllers
 {
@@ -25,10 +26,10 @@ namespace ApiAndreVeiculos_CarroServico.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CarroServico>>> GetCarroServico()
         {
-          if (_context.CarroServico == null)
-          {
-              return NotFound();
-          }
+            if (_context.CarroServico == null)
+            {
+                return NotFound();
+            }
             return await _context.CarroServico.ToListAsync();
         }
 
@@ -36,10 +37,10 @@ namespace ApiAndreVeiculos_CarroServico.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CarroServico>> GetCarroServico(int id)
         {
-          if (_context.CarroServico == null)
-          {
-              return NotFound();
-          }
+            if (_context.CarroServico == null)
+            {
+                return NotFound();
+            }
             var carroServico = await _context.CarroServico.FindAsync(id);
 
             if (carroServico == null)
@@ -53,14 +54,18 @@ namespace ApiAndreVeiculos_CarroServico.Controllers
         // PUT: api/CarroServicos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCarroServico(int id, CarroServico carroServico)
+        public async Task<IActionResult> PutCarroServico(int id, CarroServicoDTO carroServicoDTO)
         {
-            if (id != carroServico.Id)
+            if (id != carroServicoDTO.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(carroServico).State = EntityState.Modified;
+            CarroServico carroServico = new(carroServicoDTO);
+            carroServico.Carro = await _context.Carro.FindAsync(carroServicoDTO.CarroPlaca);
+            carroServico.Servico = await _context.Servico.FindAsync(carroServicoDTO.ServicoId);
+
+            _context.Entry(carroServicoDTO).State = EntityState.Modified;
 
             try
             {
@@ -84,16 +89,31 @@ namespace ApiAndreVeiculos_CarroServico.Controllers
         // POST: api/CarroServicos
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CarroServico>> PostCarroServico(CarroServico carroServico)
+        public async Task<ActionResult<CarroServico>> PostCarroServico(CarroServicoDTO carroServicoDTO)
         {
-          if (_context.CarroServico == null)
-          {
-              return Problem("Entity set 'ApiAndreVeiculos_CarroServicoContext.CarroServico'  is null.");
-          }
-            _context.CarroServico.Add(carroServico);
-            await _context.SaveChangesAsync();
+            if (_context.CarroServico == null)
+            {
+                return Problem("Entity set 'ApiAndreVeiculos_CarroServicoContext.CarroServico'  is null.");
+            }
+            try
+            {
+                CarroServico carroServico = new(carroServicoDTO);
+                carroServico.Carro = await _context.Carro.FindAsync(carroServicoDTO.CarroPlaca);
+                carroServico.Servico = await _context.Servico.FindAsync(carroServicoDTO.ServicoId);
 
-            return CreatedAtAction("GetCarroServico", new { id = carroServico.Id }, carroServico);
+                
+
+                _context.CarroServico.Add(carroServico);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetCarroServico", new { id = carroServico.Id }, carroServico);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
         // DELETE: api/CarroServicos/5
