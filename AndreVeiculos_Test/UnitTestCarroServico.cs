@@ -4,6 +4,7 @@ using _01_ApiAndreVeiculos_Geral.Data;
 using Models;
 using ApiAndreVeiculos_CarroServico.Controllers;
 using ApiAndreVeiculos_CarroServico.Data;
+using Models.DTO;
 namespace AndreVeiculos_Test
 {
     public class UnitTestCarroServico
@@ -103,24 +104,72 @@ namespace AndreVeiculos_Test
                 context.CarroServico.Add(new CarroServico { Id = 3, Carro = carros[2], Servico = servicos[2], Status = true });
                 context.CarroServico.Add(new CarroServico { Id = 4, Carro = carros[3], Servico = servicos[0], Status = true });
                 context.CarroServico.Add(new CarroServico { Id = 5, Carro = carros[4], Servico = servicos[1], Status = false });
-                
+
                 context.SaveChanges();
             }
         }
 
         [Fact]
-        public void GetAll()
+        public void TestGetAll()
         {
             IniciarBanco();
 
             using (var context = new ApiAndreVeiculos_CarroServicoContext(options))
             {
-                CarroServicosController controller = new (context);
-                
+                CarroServicosController controller = new(context);
+
                 var CarrosServicos = controller.GetCarroServico().Result.Value;
-                if(1 == 1)
                 Assert.Equal(CarrosServicos.Count(), 5);
             };
+        }
+
+        [Fact]
+        public void TestGet()
+        {
+            IniciarBanco();
+            using (var context = new ApiAndreVeiculos_CarroServicoContext(options))
+            {
+                CarroServicosController controller = new CarroServicosController(context);
+
+                var returned = controller.GetCarroServico(1).Result.Value;
+
+                Assert.Equal(returned.Id, 1);
+            }
+
+        }
+        [Fact]
+        public void TestPost()
+        {
+            IniciarBanco();
+            Carro carro = new Carro
+            {
+                Placa = "MNO7890",
+                Marca = "Volkswagen",
+                Quilometragem = 20000.8f,
+                NumeroChassi = "5HGBH41JXMN109186",
+                Nome = "Gol",
+                AnoModelo = 2020,
+                AnoFabricacao = 2019,
+                Cor = "Prata",
+                Vendido = false
+            };
+            var servico = new Servico { Id = 1, Descricao = "Troca de óleo" };
+            
+
+            using (var context = new ApiAndreVeiculos_CarroServicoContext(options))
+            {
+                CarroServicosController controller = new CarroServicosController(context);
+
+                CarroServicoDTO carroServico = new()
+                {
+                    Id = 0,
+                    CarroPlaca = "MNO7890",
+                    ServicoId = 1,
+                    Status = true
+                };
+                var returned = controller.PostCarroServico(carroServico).Result.Value;
+                Assert.Equal(returned.Id, 6);
+            }
         }
     }
 }
