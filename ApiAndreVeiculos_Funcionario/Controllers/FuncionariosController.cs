@@ -30,14 +30,16 @@ namespace ApiAndreVeiculos_Funcionario.Controllers
             {
                 return NotFound();
             }
-            var funcionarios = await _context.Funcionario.ToListAsync();
+            var funcionarios =  _context.Funcionario.
+                Include(f => f.Endereco).ToList();
+
 
             foreach (var f in funcionarios)
             {
                 if (f.CEP == "" || f.CEP == null)
                     continue;
 
-                f.Endereco = await _context.Endereco.FindAsync(f.CEP);
+                //f.Endereco = await _context.Endereco.FindAsync(f.CEP);
             }
 
             return funcionarios;
