@@ -3,7 +3,6 @@ using Models;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using Services;
 using System.Text;
 using System.Text.Json.Nodes;
 
@@ -31,9 +30,13 @@ using (var conn = factory.CreateConnection())
                 var body = ea.Body.ToArray();
                 var returnBanco = Encoding.UTF8.GetString(body);
                 var banco = JsonConvert.DeserializeObject<Banco>(returnBanco);
-                GeralServiceMongoDb<Banco> gsmBanco = new(collectionName: "Banco");
-                gsmBanco.Create(banco);
-                Console.WriteLine($"{banco.CNPJ}, {banco.NomeBanco}, {banco.DataFundacao}");
+
+                var bancoMongo = PostApiSql(returnBanco).Result;
+
+                var bancoSql = PostApiMongo(returnBanco).Result;
+
+                Console.WriteLine($"{bancoSql.CNPJ}, {bancoSql.NomeBanco}, {bancoSql.DataFundacao}");
+                Console.WriteLine($"{bancoMongo.CNPJ}, {bancoMongo.NomeBanco}, {bancoMongo.DataFundacao}");
             };
 
             channel.BasicConsume(
@@ -46,4 +49,46 @@ using (var conn = factory.CreateConnection())
         }
     }
 
+}
+
+async Task<Banco> PostApiSql(string banco)
+{
+    try
+    {
+        string url = "https://localhost:7058/api/SqlBancos";
+        HttpClient client = new HttpClient();
+        var content = new StringContent(banco, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await client.PostAsync(url, content);
+        response.EnsureSuccessStatusCode();
+        string apiReturn = await response.Content.ReadAsStringAsync();
+        Banco b = JsonConvert.DeserializeObject<Banco>(apiReturn);
+        return b;
+
+    }
+    catch (Exception)
+    {
+
+        throw;
+    }
+}
+
+async Task<Banco> PostApiMongo(string banco)
+{
+    try
+    {
+        string url = "https://localhost:7214/api/MongoBancos";
+        HttpClient client = new HttpClient();
+        var content = new StringContent(banco, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await client.PostAsync(url, content);
+        response.EnsureSuccessStatusCode();
+        string apiReturn = await response.Content.ReadAsStringAsync();
+        Banco b = JsonConvert.DeserializeObject<Banco>(apiReturn);
+        return b;
+
+    }
+    catch (Exception)
+    {
+
+        throw;
+    }
 }
