@@ -5,6 +5,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 
 const string QUEUE_NAME = "banco";
 
@@ -31,12 +32,15 @@ using (var conn = factory.CreateConnection())
                 var returnBanco = Encoding.UTF8.GetString(body);
                 var banco = JsonConvert.DeserializeObject<Banco>(returnBanco);
 
-                var bancoMongo = PostApiSql(returnBanco).Result;
+                Task<Banco> bancoMongo = PostApiSql(returnBanco);
 
-                var bancoSql = PostApiMongo(returnBanco).Result;
+                Task<Banco> bancoSql = PostApiMongo(returnBanco);
 
-                Console.WriteLine($"{bancoSql.CNPJ}, {bancoSql.NomeBanco}, {bancoSql.DataFundacao}");
-                Console.WriteLine($"{bancoMongo.CNPJ}, {bancoMongo.NomeBanco}, {bancoMongo.DataFundacao}");
+                var tasks = new List<Task> {bancoMongo, bancoSql};
+                Task.WhenAll(bancoSql,  bancoMongo);
+
+                Console.WriteLine($"{bancoSql.Result.CNPJ}, {bancoSql.Result.NomeBanco}, {bancoSql.Result.DataFundacao}");
+                Console.WriteLine($"{bancoMongo.Result.CNPJ}, {bancoMongo.Result.NomeBanco} ,  {bancoMongo.Result.DataFundacao}");
             };
 
             channel.BasicConsume(
