@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
 using Services;
+using System.Text;
 
 namespace ApiAndreVeiculos_Banco.Controllers
 {
@@ -15,11 +18,15 @@ namespace ApiAndreVeiculos_Banco.Controllers
     public class BancosController : ControllerBase
     {
         private readonly GeralServiceMongoDb<Banco> _bancoService;
+        private readonly ConnectionFactory _factroy;
+        private const string QUEUE_NAME = "banco";
 
-        public BancosController()
+
+        public BancosController(ConnectionFactory factory)
         {
             string colletionName = "Banco";
             _bancoService = new GeralServiceMongoDb<Banco>(colletionName);
+            _factroy = factory;
         }
 
         [HttpGet]
@@ -38,15 +45,36 @@ namespace ApiAndreVeiculos_Banco.Controllers
             return _bancoService.Update(banco, banco.CNPJ);
         }
         [HttpPost]
-        public Banco Post(Banco banco)
+        public IActionResult PostMQBanco([FromBody] Banco banco)
         {
-            return _bancoService.Create(banco);
+            using (var conn = _factroy.CreateConnection())
+            {
+                using (var channel = conn.CreateModel())
+                {
+                    channel.QueueDeclare(
+                        queue: QUEUE_NAME,
+                        durable: false,
+                        exclusive: false,
+                        autoDelete: false);
+
+                    var stringBanco = JsonConvert.SerializeObject(banco);
+                    var bytesBanco = Encoding.UTF8.GetBytes(stringBanco);
+
+                    channel.BasicPublish(
+                        exchange: "",
+                        routingKey: QUEUE_NAME,
+                        basicProperties: null,
+                        body: bytesBanco
+                        );
+                };
+            }
+            return Accepted();
         }
 
         [HttpDelete]
         public ActionResult<Banco> Delete(string CNPJ)
         {
-            if(_bancoService.Remove(CNPJ))
+            if (_bancoService.Remove(CNPJ))
                 return NoContent();
             return NotFound();
         }
