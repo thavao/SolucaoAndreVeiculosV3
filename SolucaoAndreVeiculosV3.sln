@@ -27,9 +27,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiAndreVeiculos_Banco", "A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerBanco", "ConsumerBanco\ConsumerBanco.csproj", "{E1F0F062-ADC6-4E48-98E2-9261AB02E3C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiAndreVeiculos_SQLServer", "ApiAndreVeiculos_SQLServer\ApiAndreVeiculos_SQLServer.csproj", "{190A2BCD-B372-4B7A-9FA4-6DE233E01455}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiAndreVeiculos_SQLServer", "ApiAndreVeiculos_SQLServer\ApiAndreVeiculos_SQLServer.csproj", "{190A2BCD-B372-4B7A-9FA4-6DE233E01455}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiAndreVeiculos_MongoDb", "ApiAndreVeiculos_MongoDb\ApiAndreVeiculos_MongoDb.csproj", "{060EB1C5-8E16-48E6-B980-6484CB35A9D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiAndreVeiculos_MongoDb", "ApiAndreVeiculos_MongoDb\ApiAndreVeiculos_MongoDb.csproj", "{060EB1C5-8E16-48E6-B980-6484CB35A9D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiAndreVeiculos_Pagamento", "ApiAndreVeiculos_Pagamento\ApiAndreVeiculos_Pagamento.csproj", "{692CD2CB-160A-4463-BDBD-D4ED7FCD9887}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +95,10 @@ Global
 		{060EB1C5-8E16-48E6-B980-6484CB35A9D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{060EB1C5-8E16-48E6-B980-6484CB35A9D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{060EB1C5-8E16-48E6-B980-6484CB35A9D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{692CD2CB-160A-4463-BDBD-D4ED7FCD9887}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{692CD2CB-160A-4463-BDBD-D4ED7FCD9887}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{692CD2CB-160A-4463-BDBD-D4ED7FCD9887}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{692CD2CB-160A-4463-BDBD-D4ED7FCD9887}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
